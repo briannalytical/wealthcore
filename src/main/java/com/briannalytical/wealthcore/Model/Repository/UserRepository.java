@@ -1,6 +1,6 @@
-package com.briannalytical.wealthcore.Repository;
+package com.briannalytical.wealthcore.Model.Repository;
 
-import com.briannalytical.wealthcore.Model.User;
+import com.briannalytical.wealthcore.Model.Entity.User;
 import org.springframework.stereotype.Repository;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
