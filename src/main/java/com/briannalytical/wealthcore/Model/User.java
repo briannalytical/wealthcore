@@ -1,5 +1,7 @@
 package com.briannalytical.wealthcore.Model;
 
+import jakarta.persistence.*;
+
 public class User {
 
     private Long id;
