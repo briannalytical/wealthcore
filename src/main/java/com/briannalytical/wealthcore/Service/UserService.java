@@ -33,15 +33,10 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
 
-    public Optional<User> findById(Long id) {
-        return userRepository.findById(id);
-    }
+    public Optional<User> findByUsername(String username) {return userRepository.findByUsername(username);}
 
-    public boolean existsByUsername(String username) {
-        return userRepository.findByUsername(username).isPresent();
-    }
+    public Optional<User> findById(Long id) {return userRepository.findById(id);}
+
+    public boolean existsByUsername(String username) {return userRepository.findByUsername(username).isPresent();}
 }
