@@ -1,5 +1,6 @@
 package com.briannalytical.wealthcore.Model.Entity;
 
+import com.briannalytical.wealthcore.Model.Enum.UserRole;
 import jakarta.persistence.*;
 
 @Entity
@@ -20,15 +21,16 @@ public class User {
     private String email;
 
     @Column(nullable = false)
-    private String role;
-
-    @Column(nullable = false)
     private boolean isEnabled;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserRole role;
 
 
     public User() {}
 
-    public User(Long id, String username, String password, String email, String role, boolean isEnabled) {
+    public User(Long id, String username, String password, String email, UserRole role, boolean isEnabled) {
         this.id = id;
         this.username = username;
         this.password = password;
