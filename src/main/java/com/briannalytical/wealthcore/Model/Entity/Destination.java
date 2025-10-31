@@ -70,5 +70,5 @@ public class Destination {
     public void setOrderIndex(Integer orderIndex) {this.orderIndex = orderIndex;}
 
     public void setNotes(String notes) {this.notes = notes;}
-    
+
 }
