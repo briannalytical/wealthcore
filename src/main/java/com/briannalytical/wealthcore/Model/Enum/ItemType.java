@@ -4,8 +4,6 @@ public enum ItemType {
     ACCOMMODATION,
     TRANSPORTATION,
     ACTIVITY,
-    DINING,
-    DRINKS,
-    SHOPPING,
+    DAILY_SPENDING,
     OTHER
 }
