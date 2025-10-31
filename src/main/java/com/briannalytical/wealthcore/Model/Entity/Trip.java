@@ -3,6 +3,8 @@ package com.briannalytical.wealthcore.Model.Entity;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -32,6 +34,9 @@ public class Trip {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Destination> destinations = new ArrayList<>();
+
 
     public Trip() {
         this.totalCost = BigDecimal.ZERO;
@@ -60,6 +65,8 @@ public class Trip {
 
     public LocalDateTime getUpdatedAt() {return updatedAt;}
 
+    public List<Destination> getDestinations() {return destinations;}
+
 
     public void setId(Long id) {this.id = id;}
 
@@ -74,4 +81,19 @@ public class Trip {
     public void setCreatedAt(LocalDateTime createdAt) {this.createdAt = createdAt;}
 
     public void setUpdatedAt(LocalDateTime updatedAt) {this.updatedAt = updatedAt;}
+
+    public void setDestinations(List<Destination> destinations) {this.destinations = destinations;}
+
+
+    // add a destination
+    public void addDestination(Destination destination) {
+        destinations.add(destination);
+        destination.setTrip(this);
+    }
+
+    // remove a destination
+    public void removeDestination(Destination destination) {
+        destinations.remove(destination);
+        destination.setTrip(null);
+    }
 }
