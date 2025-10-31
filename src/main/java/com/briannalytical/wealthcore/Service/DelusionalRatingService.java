@@ -29,29 +29,42 @@ public class DelusionalRatingService {
         breakdown.put("dailySpendingScore", dailySpendingScore);
 
         score = costScore + durationScore + extendedStayScore + costPerDayScore + dailySpendingScore;
-        
+
         String rating = getRatingLabel(score);
 
         return new DelusionalRatingResult(score, rating, breakdown);
     }
 
-
-    // cost factor 0-30 points
+    // total cost metric (0-25 points)
     private int calculateCostScore(Trip trip) {
         BigDecimal totalCost = trip.getTotalCost();
         if (totalCost == null) return 0;
 
         double cost = totalCost.doubleValue();
 
-        //TODO: metrics for cost
-        return 0;
+        // TODO: research and adjust these thresholds
+        if (cost >= 500000) return 25;
+        else if (cost >= 250000) return 22;
+        else if (cost >= 100000) return 18;
+        else if (cost >= 50000) return 14;
+        else if (cost >= 25000) return 10;
+        else if (cost >= 10000) return 6;
+        else if (cost >= 5000) return 3;
+        else return 1;
     }
 
-    // destination chaos (how many places traveled) (0-20 points)
-    // TODO: needs destination map/collection to be implemented
-    private int calculateDestinationChaosScore(Trip trip) {
-        // return zero until db is mapped
-        return 0;
+    // trip duration metric (0-25 points)
+    private int calculateTripDurationScore(Trip trip) {
+        long tripDays = getTripDurationInDays(trip);
+        if (tripDays == 0) return 0;
+
+        // TODO: Adjust these thresholds based on research
+        if (tripDays >= 60) return 25;          // 2+ months
+        else if (tripDays >= 42) return 20;      // 6+ weeks
+        else if (tripDays >= 21) return 15;      // 3-4 weeks
+        else if (tripDays >= 10) return 8;       // 10-14 days
+        else if (tripDays >= 7) return 3;        // 1 week
+        else return 1;
     }
 
     // distance traveled (0-20 points)
