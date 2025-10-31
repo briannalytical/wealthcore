@@ -6,6 +6,7 @@ import com.briannalytical.wealthcore.Model.Entity.User;
 import com.briannalytical.wealthcore.Security.JwtUtil;
 import com.briannalytical.wealthcore.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -52,9 +53,14 @@ public class AuthController {
             // return response with token
             return ResponseEntity.ok(new AuthResponse(token, user.getUsername()));
 
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Registration failed: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            // handle validation errors i.e. email
+            return ResponseEntity.badRequest().body("Invalid registration data: " + e.getMessage());
+        } catch (DataIntegrityViolationException e) {
+            // handle duplicate registration requests
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Username or email already exists.");
         }
     }
 }
+
