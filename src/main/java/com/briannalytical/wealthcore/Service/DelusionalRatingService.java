@@ -73,8 +73,8 @@ public class DelusionalRatingService {
 
     // duration of specific destination (0-20 points)
     private int calculateExtendedStayScore(Trip trip) {
-        List<Destination> destinations = trip.getDestinations();
-        if (destinations == null || destinations.isEmpty()) return 0;
+        List<Destination> destination = trip.getDestinations();
+        if (destination == null || destination.isEmpty()) return 0;
 
         long extendedStayCount = 0;
         long totalExtendedDays = 0;
@@ -145,19 +145,55 @@ public class DelusionalRatingService {
 
         // TODO: research daily spending amounts
         if (avgDailySpending >= 2000) return 15;
-        if (avgDailySpending >= 1000) return 12;
-        if (avgDailySpending >= 500) return 9;
-        if (avgDailySpending >= 250) return 6;
-        if (avgDailySpending >= 100) return 3;
-        return 1;
+        else if (avgDailySpending >= 1000) return 12;
+        else if (avgDailySpending >= 500) return 9;
+        else if (avgDailySpending >= 250) return 6;
+        else if (avgDailySpending >= 100) return 3;
+        else return 1;
     }
 
     // Determine rating label based on score
     private String getRatingLabel(int score) {
         if (score >= 81) return "Transcended the Fourth Dimension of Delusion";
-        if (score >= 61) return "Soul Has Departed the Body";
-        if (score >= 41) return "Absolutely Unhinged";
-        if (score >= 21) return "Reasonably Delusional";
-        return "Optimistically Rational";
+        else if (score >= 61) return "Soul Has Departed the Body";
+        else if (score >= 41) return "Absolutely Unhinged";
+        else if (score >= 21) return "Reasonably Delusional";
+        else return "Optimistically Rational";
+    }
+
+
+    // helper
+    // get trip duration in days
+    private long getTripDurationInDays(Trip trip) {
+        List<Destination> destinations = trip.getDestinations();
+        if (destinations == null || destinations.isEmpty()) return 0;
+
+        Destination firstDestination = destinations.stream()
+                .filter(d -> d.getArrivalDate() != null)
+                .min((d1, d2) -> d1.getArrivalDate().compareTo(d2.getArrivalDate()))
+                .orElse(null);
+
+        Destination lastDestination = destinations.stream()
+                .filter(d -> d.getDepartureDate() != null)
+                .max((d1, d2) -> d2.getDepartureDate().compareTo(d1.getDepartureDate()))
+                .orElse(null);
+
+        if (firstDestination == null || lastDestination == null) return 0;
+        if (firstDestination.getArrivalDate() == null || lastDestination.getDepartureDate() == null) return 0;
+
+        return ChronoUnit.DAYS.between(
+                firstDestination.getArrivalDate(),
+                lastDestination.getDepartureDate()
+        );
+    }
+
+    // Helper: Get destination duration in days
+    private long getDestinationDurationInDays(Destination destination) {
+        if (destination.getArrivalDate() == null || destination.getDepartureDate() == null) return 0;
+
+        return ChronoUnit.DAYS.between(
+                destination.getArrivalDate(),
+                destination.getDepartureDate()
+        );
     }
 }
