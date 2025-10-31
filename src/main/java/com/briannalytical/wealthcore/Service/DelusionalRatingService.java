@@ -17,19 +17,19 @@ public class DelusionalRatingService {
 
         // calculate each metric
         int costScore = calculateCostScore(trip);
-        int chaosScore = calculateDestinationChaosScore(trip);
-        int distanceScore = calculateDistanceScore(trip);
+        int durationScore = calculateTripDurationScore(trip);
+        int extendedStayScore = calculateExtendedStayScore(trip);
         int costPerDayScore = calculateCostPerDayScore(trip);
-        int activityScore = calculateActivityDensityScore(trip);
+        int dailySpendingScore = calculateDailySpendingScore(trip);
 
         breakdown.put("costScore", costScore);
-        breakdown.put("destinationChaosScore", chaosScore);
-        breakdown.put("distanceScore", distanceScore);
+        breakdown.put("durationScore", durationScore);
+        breakdown.put("extendedStayScore", extendedStayScore);
         breakdown.put("costPerDayScore", costPerDayScore);
-        breakdown.put("activityDensityScore", activityScore);
+        breakdown.put("dailySpendingScore", dailySpendingScore);
 
-        score = costScore + chaosScore + distanceScore + costPerDayScore + activityScore;
-
+        score = costScore + durationScore + extendedStayScore + costPerDayScore + dailySpendingScore;
+        
         String rating = getRatingLabel(score);
 
         return new DelusionalRatingResult(score, rating, breakdown);
