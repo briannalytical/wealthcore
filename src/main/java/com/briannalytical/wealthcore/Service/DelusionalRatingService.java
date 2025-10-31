@@ -4,8 +4,10 @@ import com.briannalytical.wealthcore.Dto.DelusionalRatingResult;
 import com.briannalytical.wealthcore.Model.Entity.Trip;
 import org.springframework.stereotype.Service;
 
+import javax.print.attribute.standard.Destination;
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -67,10 +69,35 @@ public class DelusionalRatingService {
         else return 1;
     }
 
-    // distance traveled (0-20 points)
-    // TODO: This needs destination coordinates to calculate (API?)
-    private int calculateDistanceScore(Trip trip) {
-        return 0;
+    // duration of specific destination (0-20 points)
+    private int calculateExtendedStayScore(Trip trip) {
+        List<Destination> destinations = trip.getDestinations();
+        if (destinations == null || destinations.isEmpty()) return 0;
+
+        long extendedStayCount = 0;
+        long totalExtendedDays = 0;
+
+        // TODO: adjust stay length thresholds
+        for (Destination destination : destinations) {
+            long stayDays = getDestinationDurationInDays(destination);
+
+            if (stayDays >= 30) {           // 1+ month stay
+                extendedStayCount += 3;
+                totalExtendedDays += stayDays;
+            } else if (stayDays >= 21) {    // 3+ weeks
+                extendedStayCount += 2;
+                totalExtendedDays += stayDays;
+            } else if (stayDays >= 14) {    // 2+ weeks
+                extendedStayCount += 1;
+                totalExtendedDays += stayDays;
+            }
+        }
+
+        int score = Math.toIntExact(Math.min(extendedStayCount * 5, 15));
+
+        if (totalExtendedDays >= 60) score += 5;
+
+        return Math.min(score, 20);
     }
 
     // cost per day (0-20 points)
