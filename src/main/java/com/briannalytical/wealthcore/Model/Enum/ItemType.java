@@ -5,6 +5,7 @@ public enum ItemType {
     TRANSPORTATION,
     ACTIVITY,
     DINING,
+    DRINKS,
     SHOPPING,
     OTHER
 }
