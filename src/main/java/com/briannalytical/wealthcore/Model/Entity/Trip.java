@@ -32,12 +32,6 @@ public class Trip {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Column(name = "arrival_date")
-    private LocalDate arrivalDate;
-
-    @Column(name = "departure_date")
-    private LocalDate departureDate;
-
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
@@ -72,10 +66,6 @@ public class Trip {
 
     public LocalDateTime getUpdatedAt() {return updatedAt;}
 
-    public LocalDate getDepartureDate() {return departureDate;}
-
-    public LocalDate getArrivalDate() {return arrivalDate;}
-
     public List<Destination> getDestinations() {return destinations;}
 
 
@@ -92,10 +82,7 @@ public class Trip {
     public void setCreatedAt(LocalDateTime createdAt) {this.createdAt = createdAt;}
 
     public void setUpdatedAt(LocalDateTime updatedAt) {this.updatedAt = updatedAt;}
-
-    public void setArrivalDate(LocalDate arrivalDate) {this.arrivalDate = arrivalDate;}
-
-    public void setDepartureDate(LocalDate departureDate) {this.departureDate = departureDate;}
+    
 
     public void setDestinations(List<Destination> destinations) {this.destinations = destinations;}
 

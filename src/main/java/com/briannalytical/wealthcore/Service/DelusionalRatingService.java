@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import javax.print.attribute.standard.Destination;
 import java.math.BigDecimal;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -165,16 +166,16 @@ public class DelusionalRatingService {
     // helper
     // get trip duration in days
     private long getTripDurationInDays(Trip trip) {
-        List<Destination> destinations = trip.getDestinations();
+        List<com.briannalytical.wealthcore.Model.Entity.Destination> destinations = trip.getDestinations();
         if (destinations == null || destinations.isEmpty()) return 0;
 
-        Destination firstDestination = destinations.stream()
-                .filter(d -> d.getArrivalDate() != null)
+        com.briannalytical.wealthcore.Model.Entity.Destination firstDestination = destinations.stream()
+                .filter(destination -> destination.getArrivalDate() != null)
                 .min((d1, d2) -> d1.getArrivalDate().compareTo(d2.getArrivalDate()))
                 .orElse(null);
 
-        Destination lastDestination = destinations.stream()
-                .filter(d -> d.getDepartureDate() != null)
+        com.briannalytical.wealthcore.Model.Entity.Destination lastDestination = destinations.stream()
+                .filter(destination -> destination.getDepartureDate() != null)
                 .max((d1, d2) -> d2.getDepartureDate().compareTo(d1.getDepartureDate()))
                 .orElse(null);
 
