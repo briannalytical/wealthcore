@@ -2,6 +2,8 @@ package com.briannalytical.wealthcore.Model.Entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -31,6 +33,9 @@ public class Destination {
     @Column(columnDefinition = "TEXT")
     private String notes;
 
+    @OneToMany(mappedBy = "destination", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ItineraryItem> itineraryItems = new ArrayList<>();
+
 
     public Destination() {
     }
@@ -56,6 +61,8 @@ public class Destination {
 
     public String getNotes() {return notes;}
 
+    public List<ItineraryItem> getItineraryItems() {return itineraryItems;}
+
 
     public void setId(Long id) {this.id = id;}
 
@@ -71,4 +78,18 @@ public class Destination {
 
     public void setNotes(String notes) {this.notes = notes;}
 
+    public void setItineraryItems(List<ItineraryItem> itineraryItems) {this.itineraryItems = itineraryItems;}
+
+
+    // add an itinerary item
+    public void addItineraryItem(ItineraryItem item) {
+        itineraryItems.add(item);
+        item.setDestination(this);
+    }
+
+    // remote itinerary item
+    public void removeItineraryItem(ItineraryItem item) {
+        itineraryItems.remove(item);
+        item.setDestination(null);
+    }
 }
