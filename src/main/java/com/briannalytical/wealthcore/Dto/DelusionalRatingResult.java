@@ -1,5 +1,9 @@
 package com.briannalytical.wealthcore.Dto;
 
+import com.briannalytical.wealthcore.Dto.DelusionalRatingResult;
+import com.briannalytical.wealthcore.Model.Entity.Trip;
+import org.springframework.stereotype.Service;
+import java.util.HashMap;
 import java.util.Map;
 
 public class DelusionalRatingResult {
