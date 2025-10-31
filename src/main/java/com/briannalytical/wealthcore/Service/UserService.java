@@ -1,6 +1,7 @@
 package com.briannalytical.wealthcore.Service;
 
 import com.briannalytical.wealthcore.Model.Entity.User;
+import com.briannalytical.wealthcore.Model.Enum.UserRole;
 import com.briannalytical.wealthcore.Model.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,7 +28,7 @@ public class UserService {
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));
         user.setEmail(email);
-        user.setRole("USER");
+        user.setRole(UserRole.USER);
         user.setEnabled(true);
 
         return userRepository.save(user);
