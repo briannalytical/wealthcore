@@ -1,7 +1,9 @@
 package com.briannalytical.wealthcore.Service;
 
 import com.briannalytical.wealthcore.Dto.DelusionalRatingResult;
+import com.briannalytical.wealthcore.Model.Entity.ItineraryItem;
 import com.briannalytical.wealthcore.Model.Entity.Trip;
+import com.briannalytical.wealthcore.Model.Enum.ItemType;
 import org.springframework.stereotype.Service;
 
 import javax.print.attribute.standard.Destination;
@@ -60,7 +62,7 @@ public class DelusionalRatingService {
         long tripDays = getTripDurationInDays(trip);
         if (tripDays == 0) return 0;
 
-        // TODO: Adjust these thresholds based on research
+        // TODO: adjust based on research
         if (tripDays >= 60) return 25;          // 2+ months
         else if (tripDays >= 42) return 20;      // 6+ weeks
         else if (tripDays >= 21) return 15;      // 3-4 weeks
@@ -100,26 +102,62 @@ public class DelusionalRatingService {
         return Math.min(score, 20);
     }
 
-    // cost per day (0-20 points)
-    // TODO: requires a trip duration
+    // estimated daily expense cost (1-15 points)
     private int calculateCostPerDayScore(Trip trip) {
-        // will return 0 until trip days can be calculated
-        return 0;
+        BigDecimal totalCost = trip.getTotalCost();
+        if (totalCost == null) return 0;
+
+        long tripDays = getTripDurationInDays(trip);
+        if (tripDays == 0) return 0;
+
+        BigDecimal costPerDay = BigDecimal.valueOf(totalCost.doubleValue() / tripDays);
+
+        // TODO: adjust thresholds based on research
+        if (costPerDay.compareTo(BigDecimal.valueOf(10000)) >= 0) return 15;
+        else if (costPerDay.compareTo(BigDecimal.valueOf(5000)) >= 0) return 12;
+        else if (costPerDay.compareTo(BigDecimal.valueOf(2000)) >= 0) return 9;
+        else if (costPerDay.compareTo(BigDecimal.valueOf(1000)) >= 0) return 6;
+        else if (costPerDay.compareTo(BigDecimal.valueOf(500)) >= 0) return 3;
+        else return 1;
     }
 
-    // activity density (0-10 points)
-    // TODO: itinerary items map/collection
-    private int calculateActivityDensityScore(Trip trip) {
-        // will return 0 until collection is made
-        return 0;
+    // daily spending on experiences (0-15 points)
+    private int calculateDailySpendingScore(Trip trip) {
+        List<Destination> destinations = trip.getDestinations();
+        if (destinations == null || destinations.isEmpty()) return 0;
+
+        long tripDays = getTripDurationInDays(trip);
+        if (tripDays == 0) return 0;
+
+        // add up all DAILY_SPENDING items
+        BigDecimal totalDailySpending = BigDecimal.ZERO;
+
+        for (Destination destination : destinations) {
+            if (destination.getItineraryItems() == null) continue;
+
+            for (ItineraryItem item : destination.getItineraryItems()) {
+                if (item.getItemType() == ItemType.DAILY_SPENDING && item.getCost() != null) {
+                    totalDailySpending = totalDailySpending.add(item.getCost());
+                }
+            }
+        }
+        double avgDailySpending = totalDailySpending.doubleValue() / tripDays;
+
+        // TODO: research daily spending amounts
+        if (avgDailySpending >= 2000) return 15;
+        if (avgDailySpending >= 1000) return 12;
+        if (avgDailySpending >= 500) return 9;
+        if (avgDailySpending >= 250) return 6;
+        if (avgDailySpending >= 100) return 3;
+        return 1;
     }
 
-    // determine rating label based on score
+    // Determine rating label based on score
     private String getRatingLabel(int score) {
         if (score >= 81) return "Transcended the Fourth Dimension of Delusion";
-        else if (score >= 61) return "Soul Has Departed the Body";
-        else if (score >= 41) return "Absolutely Unhinged";
-        else if (score >= 21) return "Reasonably Delusional";
-        else return "Optimistically Rational";
+        if (score >= 61) return "Soul Has Departed the Body";
+        if (score >= 41) return "Absolutely Unhinged";
+        if (score >= 21) return "Reasonably Delusional";
+        return "Optimistically Rational";
     }
 }
