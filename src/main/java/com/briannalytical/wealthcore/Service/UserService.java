@@ -2,7 +2,7 @@ package com.briannalytical.wealthcore.Service;
 
 import com.briannalytical.wealthcore.Model.Entity.User;
 import com.briannalytical.wealthcore.Model.Enum.UserRole;
-import com.briannalytical.wealthcore.Model.Repository.UserRepository;
+import com.briannalytical.wealthcore.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
