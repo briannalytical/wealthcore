@@ -6,7 +6,7 @@ import com.briannalytical.wealthcore.Model.Entity.Trip;
 import com.briannalytical.wealthcore.Model.Enum.ItemType;
 import org.springframework.stereotype.Service;
 
-import javax.print.attribute.standard.Destination;
+import com.briannalytical.wealthcore.Model.Entity.Destination;
 import java.math.BigDecimal;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
@@ -74,15 +74,15 @@ public class DelusionalRatingService {
 
     // duration of specific destination (0-20 points)
     private int calculateExtendedStayScore(Trip trip) {
-        List<Destination> destination = trip.getDestinations();
-        if (destination == null || destination.isEmpty()) return 0;
+        List<Destination> destinations = trip.getDestinations();
+        if (destinations == null || destinations.isEmpty()) return 0;
 
         long extendedStayCount = 0;
         long totalExtendedDays = 0;
 
         // TODO: adjust stay length thresholds
-        for (Destination destination : destinations) {
-            long stayDays = getDestinationDurationInDays(destination);
+        for (Destination d : destinations) {
+            long stayDays = getDestinationDurationInDays(d);
 
             if (stayDays >= 30) {           // 1+ month stay
                 extendedStayCount += 3;
