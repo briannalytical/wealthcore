@@ -48,7 +48,7 @@ public class User {
 
     public String getEmail() {return email;}
 
-    public String UserRole() {return UserRole();}
+    public UserRole getRole() {return role;}
 
     public boolean isEnabled() {return isEnabled;}
 
