@@ -62,9 +62,7 @@ public class DelusionalRatingService {
     private int calculateTripDurationScore(Trip trip) {
         long tripDays = getTripDurationInDays(trip);
         if (tripDays == 0) return 0;
-
-        // TODO: adjust based on research
-        if (tripDays >= 60) return 25;          // 2+ months
+        else if (tripDays >= 60) return 25;       // 2+ months
         else if (tripDays >= 42) return 20;      // 6+ weeks
         else if (tripDays >= 21) return 15;      // 3-4 weeks
         else if (tripDays >= 10) return 8;       // 10-14 days
@@ -80,7 +78,6 @@ public class DelusionalRatingService {
         long extendedStayCount = 0;
         long totalExtendedDays = 0;
 
-        // TODO: adjust stay length thresholds
         for (Destination d : destinations) {
             long stayDays = getDestinationDurationInDays(d);
 
