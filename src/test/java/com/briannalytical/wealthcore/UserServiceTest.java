@@ -14,8 +14,7 @@ import java.util.Optional;
 
 import static com.jayway.jsonpath.internal.path.PathCompiler.fail;
 import static org.hamcrest.Matchers.any;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 public class UserServiceTest {
@@ -81,6 +80,21 @@ public class UserServiceTest {
 
         // assert
         assertNotNull(result);
+    }
+
+    @Test
+    void shouldNotFindNonExistentUser() {
+        // arrange
+        String username = "nonexistent";
+
+        // act
+        Optional<User> emptyBox = Optional.empty();
+        when(userRepository.findByUsername(username)).thenReturn(emptyBox);
+
+        Optional<User> result = userService.findByUsername(username);
+
+        // assert
+        assertFalse(result.isPresent());
     }
 
 }
