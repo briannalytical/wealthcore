@@ -61,5 +61,27 @@ public class UserServiceTest {
         }
     }
 
+    @Test
+    public void registerUser_ShouldCreateNewUser() {
+        // arrange
+        String username = "newuser";
+        String password = "password123";
+        String email = "new@example.com";
+
+        // act
+        Optional<User> emptyBox = Optional.empty();
+        when(userRepository.findByUsername(username)).thenReturn(emptyBox);
+
+        when(passwordEncoder.encode(password)).thenReturn("encodedPassword123");
+
+        User newUser = new User();
+        when(userRepository.save(newUser)).thenReturn(testUser);
+
+        User result = userService.registerUser(username, password, email);
+
+        // assert
+        assertNotNull(result);
+    }
+
 }
 
