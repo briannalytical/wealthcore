@@ -13,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Optional;
 
 import static com.jayway.jsonpath.internal.path.PathCompiler.fail;
-import static org.hamcrest.Matchers.any;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
